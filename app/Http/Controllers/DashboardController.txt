@@ -1,0 +1,50 @@
+<?php
+
+namespace App\Http\Controllers;
+
+use Illuminate\Http\Request;
+use Illuminate\Support\Facades\DB;
+
+class DashboardController extends Controller
+{
+    public function index() {
+
+        return view('dashboard');
+    }
+
+    public function test() {
+        echo "Hello Test";
+
+        // $books = DB::select('select * from books where id = ?', [ 2 ]);
+
+        // $books = DB::select('select * from books where id = :id', [ 'id' => 77 ]);
+
+        $result = DB::insert('insert into books (title, synopsis, price) values (?, ?, ?)', 
+        [ 
+            'Puteri Gunung Ledang', 
+            'Tun Sri Lanang', 
+            150.55 
+        ]);
+
+        // $book = DB::select('select * from books order by id desc limit 1');
+
+        // update sql
+        DB::connection('second_db')->update('update books set title = ? where id = ?', 
+        [
+            'Harimau Jadian', 1
+        ]);
+
+        // delete sql
+        DB::connection('second_db')->delete('delete from books where id = ?', [ 1 ]);
+
+        // config/database.php - boleh tukar connection
+        $book1 = DB::connection('second_db')->select('select * from books where id = 1');
+
+        $book2 = DB::select('select * from books where id = 1');
+
+        echo "<pre>Book1 \n</pre>";
+        var_dump($book1);
+        echo "<pre>\n\nBook 2 \n</pre>";
+        var_dump($book2);
+    }
+}
